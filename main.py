@@ -6,9 +6,9 @@ import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-# Função para ajuste quadrático
-def quadratic_function(x, a, b, c):
-    return a * x**2 + b * x + c
+# Função para ajuste linear
+def linear_function(x, a, b):
+    return a * x + b
 
 def ajustar_e_plotar():
     try:
@@ -21,22 +21,22 @@ def ajustar_e_plotar():
         y_data = np.array(y_data)
         
         # Ajuste da curva
-        params, _ = curve_fit(quadratic_function, x_data, y_data)
-        a, b, c = params
+        params, _ = curve_fit(linear_function, x_data, y_data)
+        a, b = params
         
         # Mostrar os parâmetros ajustados
-        result_text.set(f"Função ajustada: y = {a:.2f}x^2 + {b:.2f}x + {c:.2f}")
+        result_text.set(f"Função ajustada: y = {a:.2f}x + {b:.2f}")
         
         # Plotar os dados e a função ajustada
         fig, ax = plt.subplots()
         ax.scatter(x_data, y_data, color='red', label='Dados')
         x_fit = np.linspace(min(x_data), max(x_data), 100)
-        y_fit = quadratic_function(x_fit, *params)
-        ax.plot(x_fit, y_fit, color='blue', label=f'Fit: $y = {a:.2f}x^2 + {b:.2f}x + {c:.2f}$')
+        y_fit = linear_function(x_fit, *params)
+        ax.plot(x_fit, y_fit, color='blue', label=f'Fit: $y = {a:.2f}x + {b:.2f}$')
         ax.set_xlabel('x')
         ax.set_ylabel('y')
         ax.legend()
-        ax.set_title('Ajuste de Curva Quadrática')
+        ax.set_title('Ajuste de Curva Linear')
         
         # Limpar o canvas anterior
         for widget in plot_frame.winfo_children():
@@ -86,7 +86,7 @@ def remove_entry():
 
 # Criação da interface gráfica
 root = tk.Tk()
-root.title("Ajuste de Curva Quadrática")
+root.title("Ajuste de Curva Linear")
 
 # Configuração do layout
 root.geometry("600x600")
