@@ -153,8 +153,7 @@ class AplicacaoAjusteCurva(tk.Tk):
 
     def plotar_grafico(self, x, y, tipo_funcao, coeficientes):
         # Configurar plot
-        # Configurar plot
-        fig = plt.figure(figsize=(8, 6), facecolor='white')  # Define o tamanho e a cor de fundo do gráfico
+        fig = plt.figure(figsize=(8, 6), facecolor='white')
         ax = fig.add_subplot(111)
 
         # Scatter plot dos dados
@@ -163,40 +162,37 @@ class AplicacaoAjusteCurva(tk.Tk):
         # Calcular a linha da função ajustada
         if tipo_funcao == 'exponencial':
             a, b = coeficientes
-            x_fit = np.linspace(min(x), max(x), 500)  # 500 pontos entre o mínimo e o máximo de x
+            x_fit = np.linspace(min(x), max(x), 500)
             y_fit = a * np.exp(b * x_fit)
             ax.plot(x_fit, y_fit, color='red', label=f'Ajuste Exponencial: y = {a:.2f} * exp({b:.2f} * x)', linewidth=2)
+            x_infinito = np.linspace(min(x) - 1, max(x) + 1, 500)
+            y_infinito = a * np.exp(b * x_infinito)
+            ax.plot(x_infinito, y_infinito, '--', color='red', alpha=0.5, linewidth=1)
 
         elif tipo_funcao == 'logaritmico':
             a, b = coeficientes
-            x_fit = np.linspace(min(x), max(x), 500)  # 500 pontos entre o mínimo e o máximo de x
+            x_fit = np.linspace(min(x), max(x), 500)
             y_fit = a * np.log(x_fit) + b
             ax.plot(x_fit, y_fit, color='green', label=f'Ajuste Logarítmico: y = {a:.2f} * ln(x) + {b:.2f}', linewidth=2)
+            x_infinito = np.linspace(min(x) - 1, max(x) + 1, 500)
+            y_infinito = a * np.log(x_infinito) + b
+            ax.plot(x_infinito, y_infinito, '--', color='green', alpha=0.5, linewidth=1)
 
         elif tipo_funcao == 'polinomio_1':
             a, b = coeficientes
-            x_fit = np.linspace(min(x), max(x), 500)  # 500 pontos entre o mínimo e o máximo de x
+            x_fit = np.linspace(min(x), max(x), 500)
             y_fit = a * x_fit + b
             ax.plot(x_fit, y_fit, color='purple', label=f'Ajuste Polinomial 1º Grau: y = {a:.2f} * x + {b:.2f}', linewidth=2)
+            x_infinito = np.linspace(min(x) - 1, max(x) + 1, 500)
+            y_infinito = a * x_infinito + b
+            ax.plot(x_infinito, y_infinito, '--', color='purple', alpha=0.5, linewidth=1)
 
         elif tipo_funcao == 'polinomio_2':
             a, b, c = coeficientes
-            x_fit = np.linspace(min(x), max(x), 500)  # 500 pontos entre o mínimo e o máximo de x
+            x_fit = np.linspace(min(x), max(x), 500)
             y_fit = a * x_fit**2 + b * x_fit + c
             ax.plot(x_fit, y_fit, color='orange', label=f'Ajuste Polinomial 2º Grau: y = {a:.2f} * x^2 + {b:.2f} * x + {c:.2f}', linewidth=2)
-
-        # Linha infinita baseada na função ajustada
-        x_infinito = np.linspace(min(x) - 1, max(x) + 1, 500)  # Expande o intervalo para mostrar a linha infinita
-        if tipo_funcao == 'exponencial':
-            y_infinito = a * np.exp(b * x_infinito)
-            ax.plot(x_infinito, y_infinito, '--', color='red', alpha=0.5, linewidth=1)
-        elif tipo_funcao == 'logaritmico':
-            y_infinito = a * np.log(x_infinito) + b
-            ax.plot(x_infinito, y_infinito, '--', color='green', alpha=0.5, linewidth=1)
-        elif tipo_funcao == 'polinomio_1':
-            y_infinito = a * x_infinito + b
-            ax.plot(x_infinito, y_infinito, '--', color='purple', alpha=0.5, linewidth=1)
-        elif tipo_funcao == 'polinomio_2':
+            x_infinito = np.linspace(min(x) - 1, max(x) + 1, 500)
             y_infinito = a * x_infinito**2 + b * x_infinito + c
             ax.plot(x_infinito, y_infinito, '--', color='orange', alpha=0.5, linewidth=1)
 
@@ -204,7 +200,7 @@ class AplicacaoAjusteCurva(tk.Tk):
         ax.set_xlabel('X', fontsize=12)
         ax.set_ylabel('Y', fontsize=12)
         ax.legend(loc='best')
-        ax.grid(True, which='both', linestyle='--', linewidth=0.5)  # Adiciona grade em ambos os eixos
+        ax.grid(True, which='both', linestyle='--', linewidth=0.5)
 
         # Embed plot na GUI
         canvas = FigureCanvasTkAgg(fig, master=self.frame_grafico)
