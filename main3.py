@@ -53,7 +53,15 @@ class AplicacaoAjusteCurva(tk.Tk):
         tipo_funcao, coeficientes = self.identificar_tipo_ajuste(x, y)
 
         # Verificar se a melhor lei encontrada é válida (exponencial, logarítmica, polinômio 1º ou 2º grau)
-        if tipo_funcao not in ['exponencial', 'logaritmico', 'polinomio_1', 'polinomio_2']:
+        if tipo_funcao == 'polinomio_1':
+            messagebox.showerror('Erro', 'A melhor lei encontrada para estes números foi a de Equação de 1º Grau, onde não é permitida')
+            return 
+
+        if tipo_funcao == 'polinomio_2':
+            messagebox.showerror('Erro', 'A melhor lei encontrada para estes números foi a de Equação de 2º Grau, onde não é permitida')
+            return     
+
+        if tipo_funcao not in ['exponencial', 'logaritmico']:
             messagebox.showerror('Erro', 'A melhor lei de ajuste encontrada não é válida.')
             return
 
