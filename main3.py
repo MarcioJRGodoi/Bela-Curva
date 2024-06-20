@@ -8,10 +8,10 @@ from sklearn.metrics import r2_score
 class AplicacaoAjusteCurva(tk.Tk):
     def __init__(self):
         super().__init__()
-
+        # Nesta função, vai ficar responsável por toda a criação dos componentes visiveis
         self.title('Ajuste de Curva - Exponencial, Logarítmico, Polinômio 1º ou 2º Grau')
 
-        # Variáveis para os inputs de X e Y
+        
         self.label_x = tk.Label(self, text='Valores de X (separados por vírgula):')
         self.label_x.pack()
         self.entry_x = tk.Entry(self, width=50)
@@ -22,23 +22,21 @@ class AplicacaoAjusteCurva(tk.Tk):
         self.entry_y = tk.Entry(self, width=50)
         self.entry_y.pack()
 
-        # Botão para executar o ajuste e mostrar o gráfico
         self.button_ajustar = tk.Button(self, text='Ajustar e Mostrar Gráfico', command=self.ajustar_e_mostrar, bg='blue', fg='white', font=('Arial', 12, 'bold'))
         self.button_ajustar.pack()
 
-        # Frame para exibir o gráfico
         self.frame_grafico = tk.Frame(self, bg='white', bd=2, relief=tk.SUNKEN)
         self.frame_grafico.pack(padx=10, pady=10)
 
-        # Entry para mostrar a função ajustada
         self.label_funcao = tk.Label(self, text='Função Ajustada:', font=('Arial', 12, 'bold'))
         self.label_funcao.pack()
         self.entry_funcao = tk.Entry(self, width=70, state='readonly')
         self.entry_funcao.pack()
 
     def ajustar_e_mostrar(self):
-        # Obter valores de X e Y dos inputs
         try:
+            # Dentro deste TRY, vai verificar se há o mesmo número entre o X e Y pra garantir
+            # que o usuário não faça besteira
             x = list(map(float, self.entry_x.get().strip().split(',')))
             y = list(map(float, self.entry_y.get().strip().split(',')))
 
@@ -92,10 +90,25 @@ class AplicacaoAjusteCurva(tk.Tk):
         self.entry_funcao.config(state='readonly')
 
     def identificar_tipo_ajuste(self, x, y):
+        # A função abaixo funciona de uma maneira em SCORE
+        # Utilizando o R², uma medida que indica entre 0 e 1, o quão bem os dados
+        # vão estar ajustados para uma certa função 
+        # Basicamente quando tem uma variação de dados
+        # o modelo R² consegue nos ajudar se a função que estamos passando se alinha com ela.
+
         # Ajuste exponencial
         def ajuste_exponencial(x, y):
+            # Faz a transformação do Y recebido em um Log do Y
             log_y = np.log(y)
+            # A função de PolyFit tem como objetivo ajustar os valores
+            # de X e do Y em uma polinomio de Grau 1 para que seja possível traçar uma linha reta
+            # b = Indica como o logaritmo do valor de y muda à medida que x aumenta, podendo ir positivamente ou negativamente
+            # Se a_log for 2, significa que quando x é zero, o logaritmo de y é 2. 
+            # O a_log basicamente me diz que valor o y é quando o X está em 0
             b, a_log = np.polyfit(x, log_y, 1)
+
+            # Aqui vamos reverter o valor do logaritmo lá no começo
+            # pegando o a_log e transformando em um valor original
             a = np.exp(a_log)
             return a, b
 
